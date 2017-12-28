@@ -1,144 +1,103 @@
 import React from 'react'
-import { ScrollView,  Image, View ,Alert} from 'react-native'
+import { ScrollView,  Image, View ,Alert,ListView} from 'react-native'
 import {Container, Header, Title, Content, Left, Right, Body, Icon, Text, Card, CardItem, Thumbnail, Button, Text as NBText } from 'native-base'
 import { Images } from '../Themes'
 // Styles
 import styles from './Styles/FrameStyle'
-import CardTemplate from '../Components/CardTemplate'
 
-import ChartsStyle from '../Components/Styles/ChartsStyle'
-import BarChartScreen from '../Components/charts/BarChartScreen'
-import AxisLineChartScreen from '../Components/charts/AxisLineChartScreen'
-import CandleStickChartScreen from '../Components/charts/CandleStickChartScreen'
-import HorizontalBarChartScreen from '../Components/charts/HorizontalBarChartScreen'
-import LineChartScreen from '../Components/charts/LineChartScreen'
-import PieChartScreen from '../Components/charts/PieChartScreen'
-import RadarChartScreen from '../Components/charts/RadarChartScreen'
-import ScatterChartScreen from '../Components/charts/ScatterChartScreen'
-import StackedBarChartScreen from '../Components/charts/StackedBarChartScreen'
-import TimeSeriesLineChartScreen from '../Components/charts/TimeSeriesLineChartScreen'
-import ZeroLineChartScreen from '../Components/charts/ZeroLineChartScreen'
+import * as firebase from 'firebase';
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDQRru2tRRRuLTtkqTDcwtS4cxU9XXZhuI",
+    authDomain: "fir-app-bab56.firebaseapp.com",
+    databaseURL: "https://fir-app-bab56.firebaseio.com",
+    projectId: "fir-app-bab56",
+    storageBucket: "fir-app-bab56.appspot.com"
+};
+firebase.initializeApp(firebaseConfig);
+
+const StatusBar = require('../Components/Database/StatusBar');
+const ActionButton = require('../Components/Database/ActionButton');
+const ListItem = require('../Components/Database/ListItem');
+const style = require('../Components/Database/styles')
 
 export default class ChartShowCase extends React.Component {
-  state={
-  };
+  constructor(props) {
+     super(props);
+     this.state = {
+       dataSource: new ListView.DataSource({
+         rowHasChanged: (row1, row2) => row1 !== row2,
+       })
+     };
+     this.itemsRef = this.getRef().child('items');
+   }
 
+   getRef() {
+     return firebase.database().ref();
+   }
+   listenForItems(itemsRef) {
+        itemsRef.on('value', (snap) => {
+
+          // get children as an array
+          var items = [];
+          snap.forEach((child) => {
+            items.push({
+              title: child.val().title,
+              _key: child.key
+            });
+          });
+
+          this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(items)
+          });
+
+        });
+      }
+
+      componentDidMount() {
+        this.listenForItems(this.itemsRef);
+      }
+
+         _addItem() {
+
+             this.itemsRef.push({ title: "123123", val: 555 })
+             Alert.alert(
+               'Complete',
+               null
+
+             );
+         }
+
+         _renderItem(item) {
+
+           const onPress = () => {
+             Alert.alert(
+               'Complete',
+               null,
+               [
+                 {text: 'Complete', onPress: (text) => this.itemsRef.child(item._key).remove()},
+                 {text: 'Cancel', onPress: (text) => console.log('Cancelled')}
+               ]
+             );
+           };
+
+           return (
+             <ListItem item={item} onPress={onPress} />
+           );
+         }
   render () {
-       let Starss=this.state.stars;
     return (
       <View style={styles.mainContainer}>
          <Content padder>
-         <CardTemplate
-          CardTitle={
-            <View>
-            <Text>BarChartScreen</Text>
-            <Text note>April 15, 2016</Text>
-            </View>}
-          CardBody={
-            <View style={ChartsStyle.charts}>
-               <BarChartScreen/>
-           </View>}
-                    />
+           <StatusBar title="Grocery List" />
 
-           <CardTemplate CardTitle={
-             <View>
-             <Text>AxisLineChartScreen</Text>
-             <Text note>April 15, 2016</Text>
-             </View>}
-           CardBody={
-             <View style={ChartsStyle.charts}>
-               <AxisLineChartScreen/>
-            </View>}
-                      />
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this._renderItem.bind(this)}
+            enableEmptySections={true}
+            style={style.listview}/>
 
-           <CardTemplate CardTitle={
-             <View>
-             <Text>Candle Stick Chart</Text>
-             <Text note>April 15, 2016</Text>
-             </View>}
-           CardBody={
-             <View style={ChartsStyle.charts}>
-               <CandleStickChartScreen/>
-            </View>}
-                      />
-
-          <CardTemplate CardTitle={
-            <View>
-            <Text>Line Chart</Text>
-            <Text note>April 15, 2016</Text>
-            </View>}
-          CardBody={
-            <View style={ChartsStyle.charts}>
-               <LineChartScreen/>
-           </View>}
-                    />
-
-           <CardTemplate CardTitle={
-             <View>
-             <Text>Pie Chart</Text>
-             <Text note>April 15, 2016</Text>
-             </View>}
-           CardBody={
-             <View style={ChartsStyle.charts}>
-                 <PieChartScreen/>
-            </View>}
-                      />
-
-          <CardTemplate CardTitle={
-            <View>
-            <Text>Radar Chart</Text>
-            <Text note>April 15, 2016</Text>
-            </View>}
-          CardBody={
-            <View style={ChartsStyle.charts}>
-                  <RadarChartScreen/>
-           </View>}
-                    />
-
-         <CardTemplate CardTitle={
-           <View>
-           <Text>Scatter Chart</Text>
-           <Text note>April 15, 2016</Text>
-           </View>}
-         CardBody={
-           <View style={ChartsStyle.charts}>
-              <ScatterChartScreen/>
-          </View>}
-                    />
-
-          <CardTemplate CardTitle={
-            <View>
-            <Text>Stacked Bar Chart</Text>
-            <Text note>April 15, 2016</Text>
-            </View>}
-          CardBody={
-            <View style={ChartsStyle.charts}>
-                <StackedBarChartScreen/>
-           </View>}
-                    />
-
-         <CardTemplate CardTitle={
-           <View>
-           <Text>Time Series Line Chart</Text>
-           <Text note>April 15, 2016</Text>
-           </View>}
-         CardBody={
-           <View style={ChartsStyle.charts}>
-             <TimeSeriesLineChartScreen/>
-          </View>}
-                    />
-
-          <CardTemplate CardTitle={
-            <View>
-            <Text>Zero Line Chart</Text>
-            <Text note>April 15, 2016</Text>
-            </View>}
-          CardBody={
-            <View style={ChartsStyle.charts}>
-                <ZeroLineChartScreen/>
-           </View>}
-                    />
+          <ActionButton onPress={this._addItem.bind(this)} title="Add" />
       </Content>
     </View>
     )

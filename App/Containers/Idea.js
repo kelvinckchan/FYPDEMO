@@ -6,18 +6,6 @@ import { Images } from '../Themes'
 import styles from './Styles/FrameStyle'
 import CardTemplate from '../Components/CardTemplate'
 
-import ChartsStyle from '../Components/Styles/ChartsStyle'
-import BarChartScreen from '../Components/charts/BarChartScreen'
-import AxisLineChartScreen from '../Components/charts/AxisLineChartScreen'
-import CandleStickChartScreen from '../Components/charts/CandleStickChartScreen'
-import HorizontalBarChartScreen from '../Components/charts/HorizontalBarChartScreen'
-import LineChartScreen from '../Components/charts/LineChartScreen'
-import PieChartScreen from '../Components/charts/PieChartScreen'
-import RadarChartScreen from '../Components/charts/RadarChartScreen'
-import ScatterChartScreen from '../Components/charts/ScatterChartScreen'
-import StackedBarChartScreen from '../Components/charts/StackedBarChartScreen'
-import TimeSeriesLineChartScreen from '../Components/charts/TimeSeriesLineChartScreen'
-import ZeroLineChartScreen from '../Components/charts/ZeroLineChartScreen'
 
 
 export default class Idea extends React.Component {

@@ -15,6 +15,7 @@ import {
   ScrollableTab
 } from "native-base";
 
+import MapShowCase from '../Containers/MapShowCase'
 import Todo from '../Containers/Todo'
 import Idea from '../Containers/Idea'
 import ClientList from '../Containers/ClientList'
@@ -29,6 +30,9 @@ class DashBoardTab extends Component {
     return (
       <Content >
         <Tabs  initialPage={this.props.TabNumber}>
+          <Tab heading="Map" tabStyle={{backgroundColor: 'transparent'}} textStyle={{color: '#29c9db'}} activeTabStyle={{backgroundColor: '#61d9e8',opacity:0.8}} activeTextStyle={{color: '#fff', fontWeight: 'normal'}}>
+          <MapShowCase/>
+              </Tab>
         <Tab heading="Todo" tabStyle={{backgroundColor: 'transparent'}} textStyle={{color: '#29c9db'}} activeTabStyle={{backgroundColor: '#61d9e8',opacity:0.8}} activeTextStyle={{color: '#fff', fontWeight: 'normal'}}>
      <Todo/>
           </Tab>

@@ -30,9 +30,9 @@ export default class Todo extends React.Component {
     this.setState({ listViewData: newData });
   }
 
-  _onSubmit(){
+  _onSubmit(text){
     this.setState({ Num:1});
-    Alert.alert("submitted");
+    Alert.alert("submitted: "+text);
   }
   _addItem(){
     const rowHasChanged = (r1, r2) => r1 !== r2
@@ -80,9 +80,9 @@ export default class Todo extends React.Component {
         <ListView
          dataSource={this.state.dataSource}
          renderRow={data => this.renderRow(data)}
-         />
+         ></ListView>
          <Right>
-           <Button style={{backgroundColor:'#29c9db' ,flex:1, marginTop: 20 }}  onPress={()=>{this._onSubmit()}}>
+           <Button style={{backgroundColor:'#29c9db' ,flex:1, marginTop: 20 }}  onPress={(text)=>{this._onSubmit(text)}}>
              <NBText>
                Submit
              </NBText>
